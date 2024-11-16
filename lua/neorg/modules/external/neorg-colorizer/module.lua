@@ -17,6 +17,10 @@ module.public = {
 		local start_col, end_col = string.find(ln_txt, match)
 		offset = not offset and 0 or offset
 
+		-- remove white space to have conceals that respects indentations (e.i, "&color:#ffffff " <--)
+		local white_space = string.sub(ln_txt, end_col + offset + 1, end_col + offset + 1) == " "
+		offset = offset + (white_space and 1 or 0)
+
 		vim.api.nvim_buf_set_extmark(0, module.private.namespace, ln_num - 1, start_col - 1, {
 			end_line = ln_num - 1,
 			end_col = end_col + offset,
@@ -37,7 +41,7 @@ module.public = {
 				local end_colorizing = string.match(ln_txt, "&end_color ")
 				if end_colorizing then
 					is_colorizing = false
-					module.public.conceal_line("&end_color ", ln_num, ln_txt)
+					module.public.conceal_line("&end_color", ln_num, ln_txt)
 				end
 
 				goto continue
@@ -46,7 +50,7 @@ module.public = {
 			local line_colorizing = string.match(ln_txt, "&color:#(%x%x%x%x%x%x)")
 			if line_colorizing then
 				module.public.highlight_line(line_colorizing, ln_num)
-				module.public.conceal_line("&color:", ln_num, ln_txt, 8)
+				module.public.conceal_line("&color:", ln_num, ln_txt, 7)
 
 				goto continue
 			end
@@ -55,7 +59,7 @@ module.public = {
 			if start_colorizing then
 				is_colorizing = true
 				clr = start_colorizing
-				module.public.conceal_line("&start_color:", ln_num, ln_txt, 8)
+				module.public.conceal_line("&start_color:", ln_num, ln_txt, 7)
 				module.public.highlight_line(clr, ln_num)
 
 				goto continue
