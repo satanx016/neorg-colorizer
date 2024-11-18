@@ -38,10 +38,10 @@ module.public = {
         vim.api.nvim_buf_clear_namespace(0, module.private.namespace, ln_num, ln_num + 1)
         module.public.highlight_line(clr, ln_num)
 
-        local end_colorizing = string.match(ln_txt, "&end_color")
+        local end_colorizing = string.match(ln_txt, "&color_end")
         if end_colorizing then
           is_colorizing = false
-          module.public.conceal_line("&end_color", ln_num, ln_txt)
+          module.public.conceal_line("&color_end", ln_num, ln_txt)
         end
 
         goto continue
@@ -55,11 +55,11 @@ module.public = {
         goto continue
       end
 
-      local start_colorizing = string.match(ln_txt, "&start_color:#(%x%x%x%x%x%x)")
+      local start_colorizing = string.match(ln_txt, "&color_start:#(%x%x%x%x%x%x)")
       if start_colorizing then
         is_colorizing = true
         clr = start_colorizing
-        module.public.conceal_line("&start_color:", ln_num, ln_txt, 7)
+        module.public.conceal_line("&color_start:", ln_num, ln_txt, 7)
         module.public.highlight_line(clr, ln_num)
 
         goto continue
