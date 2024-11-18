@@ -38,7 +38,7 @@ module.public = {
         vim.api.nvim_buf_clear_namespace(0, module.private.namespace, ln_num, ln_num + 1)
         module.public.highlight_line(clr, ln_num)
 
-        local end_colorizing = string.match(ln_txt, "&end_color ")
+        local end_colorizing = string.match(ln_txt, "&end_color")
         if end_colorizing then
           is_colorizing = false
           module.public.conceal_line("&end_color", ln_num, ln_txt)
